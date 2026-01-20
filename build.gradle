@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.9'
     id 'io.spring.dependency-management' version '1.1.7'
+    id "com.diffplug.spotless" version "6.23.0"
 }
 
 group = 'com'
@@ -25,6 +26,14 @@ dependencies {
     /* ------------------------ TEST ------------------------ */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+spotless {
+    java {
+        removeUnusedImports() // 사용하지 않는 import 제거
+        trimTrailingWhitespace() // 라인 끝의 불필요한 공백 제거
+        endWithNewline() // 파일의 마지막에 개행 추가
+    }
 }
 
 tasks.named('test') {

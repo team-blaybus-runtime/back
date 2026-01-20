@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo "==================== spotless::start ========================"
+echo "🔎 Running spotlessApply"
+stagedFiles=$(git diff --staged --name-only)
+./gradlew spotlessApply --daemon
+for file in $stagedFiles; do
+ if test -f "$file"; then
+   git add "$file"
+ fi
+done
+echo "✅ SpotlessApply completed."
+echo "==================== spotless::end ========================"
