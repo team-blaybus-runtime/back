@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.5.9'
     id 'io.spring.dependency-management' version '1.1.7'
     id "com.diffplug.spotless" version "6.23.0"
+    id "net.ltgt.errorprone" version "4.4.0"
 }
 
 group = 'com'
@@ -23,6 +24,12 @@ dependencies {
     /* ------------------------ INIT ------------------------ */
     implementation 'org.springframework.boot:spring-boot-starter'
 
+    // JSpecify + NullAway
+    implementation 'org.jspecify:jspecify:1.0.0'
+    annotationProcessor 'org.jspecify:jspecify:1.0.0'
+    errorprone 'com.uber.nullaway:nullaway:0.12.15'
+    errorprone 'com.google.errorprone:error_prone_core:2.46.0'
+
     /* ------------------------ TEST ------------------------ */
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -33,6 +40,14 @@ spotless {
         removeUnusedImports() // 사용하지 않는 import 제거
         trimTrailingWhitespace() // 라인 끝의 불필요한 공백 제거
         endWithNewline() // 파일의 마지막에 개행 추가
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.errorprone {
+        disableAllChecks = false
+        option("NullAway:OnlyNullMarked", "true")
+        error("NullAway")
     }
 }
 
