@@ -38,3 +38,6 @@ out/
 
 ### Custom ###
 node_modules
+docker
+env
+.env
