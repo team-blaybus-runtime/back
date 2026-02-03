@@ -18,7 +18,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableJpaRepositories(
         basePackages = {
             "com.init.domain.persistence.user.repository",
-            "com.init.domain.persistence.oauth.repository"
+            "com.init.domain.persistence.oauth.repository",
+            "com.init.domain.persistence.engineering.repository"
         },
         entityManagerFactoryRef = "mysqlEntityManagerFactory",
         transactionManagerRef = "mysqlTransactionManager"
@@ -41,7 +42,8 @@ public class MysqlDataSourceConfig {
                 .packages(
                         "com.init.domain.persistence.user.entity",
                         "com.init.domain.persistence.oauth.entity",
-                        "com.init.domain.persistence.common.model"
+                        "com.init.domain.persistence.common.model",
+                        "com.init.domain.persistence.engineering.entity"
                 )
                 .persistenceUnit("mysql")
                 .build();

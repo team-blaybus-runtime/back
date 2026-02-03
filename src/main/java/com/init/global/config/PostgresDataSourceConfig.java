@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.init.domain.persistence.EngineeringKnowledge.repository",
+        basePackages = "com.init.domain.persistence.vector.repository",
         entityManagerFactoryRef = "postgresEntityManagerFactory",
         transactionManagerRef = "postgresTransactionManager"
 )
@@ -37,7 +37,7 @@ public class PostgresDataSourceConfig {
 
         return builder
                 .dataSource(dataSource)
-                .packages("com.init.domain.persistence.EngineeringKnowledge.entity")
+                .packages("com.init.domain.persistence.vector.entity")
                 .persistenceUnit("postgres")
                 .properties(properties)
                 .build();
