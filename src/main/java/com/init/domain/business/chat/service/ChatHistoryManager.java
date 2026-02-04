@@ -9,7 +9,6 @@ import com.init.domain.persistence.chat.repository.ChatSummaryRepository;
 import com.init.domain.persistence.chat.entity.ChatSummary;
 import com.init.global.annotation.Helper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
