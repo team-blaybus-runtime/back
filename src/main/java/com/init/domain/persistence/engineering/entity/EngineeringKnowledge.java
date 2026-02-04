@@ -40,4 +40,7 @@ public class EngineeringKnowledge {
 
     @Comment("재질 정보")
     private String material;
+
+    @Comment("에셋 파일 저장 주소")
+    private String assetUrl;
 }
