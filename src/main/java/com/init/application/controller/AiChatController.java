@@ -21,9 +21,10 @@ public class AiChatController implements AiChatApi {
 
     private final ChatService chatService;
 
+    // todo 업데이트 진행시에 실제 AuthenticationPrincipal 을 통해서 사용자의 Id를 가져오 도록 수정 필요
     @PostMapping
     public CommonResponseUtil<AiChatRes> chat(@RequestBody @Validated ChatReq req){
-        String chat = chatService.chat(req.content(), req.productType());
-        return CommonResponseUtil.ok(new AiChatRes(chat));
+        AiChatRes res = chatService.chat(req.userId(), req);
+        return CommonResponseUtil.ok(res);
     }
 }
