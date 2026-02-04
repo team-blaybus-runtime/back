@@ -22,6 +22,7 @@ public class ChatService {
     private final OpenAiClient openAiClient;
     private final EngineeringKnowledgeRetriever retriever;
     private final EngineeringChatPromptProvider promptProvider;
+    private final ChatQueryRewriter queryRewriter;
     private final ChatHistoryManager historyManager;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -33,13 +34,16 @@ public class ChatService {
         String summary = historyManager.getSummary(chatRoom.getId()).orElse(null);
         List<ChatMessage> history = historyManager.getRecentMessages(chatRoom.getId());
 
-        // 3. 관련 지식 검색 (Retrieval)
-        List<EngineeringKnowledge> knowledges = retriever.retrieve(req.content(), req.productType());
+        // 3. 질문 재작성 (Contextual Query Expansion) - retrieval을 위해 문맥 반영
+        String searchContext = queryRewriter.rewrite(req.content(), summary, history);
 
-        // 4. 프롬프트 생성 (Prompt Construction) - 요약과 이전 이력 포함
+        // 4. 관련 지식 검색 (Retrieval) - 재작성된 쿼리 사용
+        List<EngineeringKnowledge> knowledges = retriever.retrieve(searchContext, req.productType());
+
+        // 5. 프롬프트 생성 (Prompt Construction) - 요약과 이전 이력 포함
         String currentPrompt = promptProvider.createPrompt(req.content(), knowledges, summary, history);
 
-        // 5. OpenAI 호출 (Generation)
+        // 6. OpenAI 호출 (Generation)
         String answer = openAiClient.chat(currentPrompt);
 
         // todo 결합도를 약하게 하기 위해서 비돋시 이벤트를 통한 데이터 저장.. 추후에 mq,kafka가 들어갈때 해당 부분을 수정 필요?
