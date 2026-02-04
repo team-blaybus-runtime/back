@@ -5,13 +5,16 @@ import com.init.domain.persistence.engineering.entity.ProductType;
 import com.init.domain.persistence.engineering.repository.EngineeringKnowledgeRepository;
 import com.init.domain.persistence.vector.entity.EngineeringKnowledgeEmbedding;
 import com.init.domain.persistence.vector.repository.EngineeringKnowledgeEmbeddingRepository;
+import com.init.global.annotation.Helper;
 import com.init.infra.openai.client.OpenAiClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+/**
+ * 엔지니어링 관련 지식 검색을 담당하는 서비스 클래스.
+ */
+@Helper
 @RequiredArgsConstructor
 public class EngineeringKnowledgeRetriever {
 
@@ -37,8 +40,11 @@ public class EngineeringKnowledgeRetriever {
                 .map(EngineeringKnowledgeEmbedding::getKnowledgeId)
                 .toList();
 
+        // 1.1. 만약 데이터가 존재하지 않은 경우 모든 데이터를 기반으로 ID 생성
         if (ids.isEmpty()) {
-            return List.of();
+            ids = engineeringKnowledgeEmbeddingRepo.findByProductType(productType.name()).stream()
+                    .map(EngineeringKnowledgeEmbedding::getKnowledgeId)
+                    .toList();
         }
 
         // 2. 검색된 ID를 바탕으로 메타데이터 데이터베이스(MySQL)에서 상세 정보 조회

@@ -3,14 +3,18 @@ package com.init.infra.openai.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OpenAiClient {
@@ -69,5 +73,9 @@ public class OpenAiClient {
                 .bodyToMono(JsonNode.class)
                 .map(n -> n.get("choices").get(0).get("message").get("content").asText())
                 .block();
+    }
+
+    public String chat(String userPrompt) {
+        return chat(List.of(Map.of("role", "user", "content", userPrompt)));
     }
 }

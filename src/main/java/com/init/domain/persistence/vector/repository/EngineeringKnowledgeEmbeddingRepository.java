@@ -22,4 +22,6 @@ public interface EngineeringKnowledgeEmbeddingRepository extends JpaRepository<E
     LIMIT 5
     """, nativeQuery = true)
     List<EngineeringKnowledgeEmbedding> searchSimilar(@Param("embedding") float[] embedding, @Param("productType") String productType);
+
+    List<EngineeringKnowledgeEmbedding> findByProductType(String productType);
 }
