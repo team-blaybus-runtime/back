@@ -1,21 +1,28 @@
 spring:
   config:
     import: optional:file:.env[.properties]
+
   sql:
     init:
       mode: always
+
   datasource:
-    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/init?characterEncoding=UTF-8&serverTimezone=UTC}
-    username: ${DATASOURCE_USERNAME:root}
-    password: ${DATASOURCE_PASSWORD:1234}
+    mysql:
+      jdbc-url: ${MYSQL_JDBC_URL:jdbc:mysql://localhost:3306/init?characterEncoding=UTF-8&serverTimezone=UTC}
+      username: ${MYSQL_USERNAME}
+      password: ${MYSQL_PASSWORD}
+      driver-class-name: ${MYSQL_DRIVER:com.mysql.cj.jdbc.Driver}
+
+    postgres:
+      jdbc-url: ${POSTGRES_JDBC_URL:jdbc:postgresql://localhost:5432/postgres}
+      username: ${POSTGRES_USERNAME}
+      password: ${POSTGRES_PASSWORD}
+      driver-class-name: ${POSTGRES_DRIVER:org.postgresql.Driver}
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:none}
     defer-datasource-initialization: true
-    database-platform: org.hibernate.dialect.MySQLDialect
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
 
 oauth2:
   client:
@@ -48,6 +55,11 @@ jwt:
 # swagger에서 자동으로 error response를 생성하지 않도록 설정
 springdoc:
   override-with-generic-response: false
+
+openai:
+  api-key: ${OPENAI_API_KEY}
+  embedding-model: ${OPENAI_EMBEDDING_MODEL}
+  chat-model: ${OPENAI_CHAT_MODEL}
 
 logging:
   level:
