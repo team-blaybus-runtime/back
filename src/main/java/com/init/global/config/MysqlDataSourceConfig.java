@@ -19,7 +19,8 @@ import org.springframework.transaction.PlatformTransactionManager;
         basePackages = {
             "com.init.domain.persistence.user.repository",
             "com.init.domain.persistence.oauth.repository",
-            "com.init.domain.persistence.engineering.repository"
+            "com.init.domain.persistence.engineering.repository",
+            "com.init.domain.persistence.userstudyhis.repository"
         },
         entityManagerFactoryRef = "mysqlEntityManagerFactory",
         transactionManagerRef = "mysqlTransactionManager"
@@ -43,7 +44,8 @@ public class MysqlDataSourceConfig {
                         "com.init.domain.persistence.user.entity",
                         "com.init.domain.persistence.oauth.entity",
                         "com.init.domain.persistence.common.model",
-                        "com.init.domain.persistence.engineering.entity"
+                        "com.init.domain.persistence.engineering.entity",
+                        "com.init.domain.persistence.userstudyhis.entity"
                 )
                 .persistenceUnit("mysql")
                 .build();
