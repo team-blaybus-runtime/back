@@ -91,4 +91,9 @@ public class UserService {
                 req.nickname(), req.major(), req.grade(), req.goal()
         );
     }
+
+    @Transactional
+    public void delete(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }

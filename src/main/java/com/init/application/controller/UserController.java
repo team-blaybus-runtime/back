@@ -59,4 +59,10 @@ public class UserController implements UserApi {
                               @RequestBody @Validated ProfileUpdateReq req) {
         userService.updateProfile(user.getUserId(), req);
     }
+
+    @Override
+    @DeleteMapping("/users")
+    public void delete(@AuthenticationPrincipal SecurityUserDetails user) {
+        userService.delete(user.getUserId());
+    }
 }
