@@ -1,15 +1,11 @@
 package com.init.application.dto.auth.req;
 
-import com.init.global.annotation.Nickname;
 import com.init.global.annotation.Password;
 import com.init.global.annotation.Username;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(title = "일반 회원가입 요청 DTO")
 public record AuthSignUpReq(
-        @Schema(title = "닉네임", example = "홍길동")
-        @Nickname
-        String nickname,
         @Schema(title = "아이디", example = "admin")
         @Username
         String username,

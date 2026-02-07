@@ -59,6 +59,29 @@ openai:
   embedding-model: ${OPENAI_EMBEDDING_MODEL:text-embedding-ada-002}
   chat-model: ${OPENAI_CHAT_MODEL:gpt-3.5-turbo}
 
+product:
+  drone:
+    image:
+      url: ${DRONE_IMAGE_URL}
+  leaf_spring:
+    image:
+      url: ${LEAF_SPRING_IMAGE_URL}
+  machine_vice:
+    image:
+      url: ${MACHINE_VICE_IMAGE_URL}
+  robot_arm:
+    image:
+      url: ${ROBOT_ARM_IMAGE_URL}
+  robot_gripper:
+    image:
+      url: ${ROBOT_GRIPPER_IMAGE_URL}
+  suspension:
+    image:
+      url: ${SUSPENSION_IMAGE_URL}
+  v4_engine:
+    image:
+      url: ${V4_ENGINE_IMAGE_URL}
+
 logging:
   level:
     com.init: DEBUG
