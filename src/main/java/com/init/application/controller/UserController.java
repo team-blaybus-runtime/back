@@ -3,6 +3,7 @@ package com.init.application.controller;
 import com.init.application.controller.api.UserApi;
 import com.init.application.dto.user.req.NicknameCheckReq;
 import com.init.application.dto.user.req.NicknameUpdateReq;
+import com.init.application.dto.user.req.ProfileUpdateReq;
 import com.init.application.dto.user.res.UserDetailRes;
 import com.init.domain.business.user.service.UserService;
 import com.init.infra.security.authentication.SecurityUserDetails;
@@ -50,5 +51,18 @@ public class UserController implements UserApi {
     public void updatePassword(@AuthenticationPrincipal SecurityUserDetails user,
                                @RequestBody NicknameUpdateReq req) {
         userService.updateNickname(user.getUserId(), req);
+    }
+
+    @Override
+    @PutMapping("/users/profiles")
+    public void updateProfile(@AuthenticationPrincipal SecurityUserDetails user,
+                              @RequestBody @Validated ProfileUpdateReq req) {
+        userService.updateProfile(user.getUserId(), req);
+    }
+
+    @Override
+    @DeleteMapping("/users")
+    public void delete(@AuthenticationPrincipal SecurityUserDetails user) {
+        userService.delete(user.getUserId());
     }
 }
