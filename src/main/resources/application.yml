@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${JPA_DDL_AUTO:update}
+      ddl-auto: ${JPA_DDL_AUTO:none}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -55,10 +55,13 @@ springdoc:
   override-with-generic-response: false
 
 openai:
-  api-key: ${OPENAI_API_KEY}
-  embedding-model: ${OPENAI_EMBEDDING_MODEL}
-  chat-model: ${OPENAI_CHAT_MODEL}
+  api-key: ${OPENAI_API_KEY:example-api-key}
+  embedding-model: ${OPENAI_EMBEDDING_MODEL:text-embedding-ada-002}
+  chat-model: ${OPENAI_CHAT_MODEL:gpt-3.5-turbo}
 
 logging:
   level:
     com.init: DEBUG
+
+server:
+  port: 8081
