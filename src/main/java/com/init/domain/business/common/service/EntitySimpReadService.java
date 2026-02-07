@@ -1,6 +1,9 @@
 package com.init.domain.business.common.service;
 
+import com.init.domain.business.memo.error.MemoErrorCode;
 import com.init.domain.business.user.error.UserErrorCode;
+import com.init.domain.persistence.memo.entity.Memo;
+import com.init.domain.persistence.memo.repository.MemoRepository;
 import com.init.domain.persistence.user.entity.User;
 import com.init.domain.persistence.user.repository.UserRepository;
 import com.init.global.exception.GlobalException;
@@ -22,9 +25,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EntitySimpReadService {
     private final UserRepository userRepository;
+    private final MemoRepository memoRepository;
 
     public User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND));
+    }
+
+    public Memo findUserMemo(Long memoId) {
+        return memoRepository.findById(memoId)
+                .orElseThrow(() -> new GlobalException(MemoErrorCode.NOT_FOUND));
     }
 }
