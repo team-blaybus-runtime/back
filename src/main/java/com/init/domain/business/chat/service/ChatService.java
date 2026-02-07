@@ -2,18 +2,23 @@ package com.init.domain.business.chat.service;
 
 import com.init.application.dto.chat.req.ChatReq;
 import com.init.application.dto.chat.res.AiChatRes;
+import com.init.application.dto.chat.res.ChatMessageDetailRes;
+import com.init.application.dto.chat.res.ChatRoomRes;
 import com.init.domain.business.chat.event.ChatProcessEvent;
 import com.init.domain.persistence.chat.entity.ChatMessage;
 import com.init.domain.persistence.chat.entity.ChatRoom;
 import com.init.domain.persistence.engineering.entity.EngineeringKnowledge;
+import com.init.global.util.StepTimer;
 import com.init.infra.openai.client.OpenAiClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,29 +32,52 @@ public class ChatService {
     private final ApplicationEventPublisher eventPublisher;
 
     public AiChatRes chat(Long userId, ChatReq req) {
+        StepTimer timer = new StepTimer("AI_CHAT");
+
         // 1. ChatRoom 확인/생성
         ChatRoom chatRoom = historyManager.getOrCreateChatRoom(userId, req.chatRoomId());
+        timer.log("1. getOrCreateChatRoom");
 
-        // 2. 이전 요약 및 최근 대화 로드 (현재 질문 저장 전의 이력)
+        // 2. 이전 요약 및 최근 대화 로드
         String summary = historyManager.getSummary(chatRoom.getId()).orElse(null);
-        List<ChatMessage> history = historyManager.getRecentMessages(chatRoom.getId());
+        timer.log("2-1. getSummary");
 
-        // 3. 질문 재작성 (Contextual Query Expansion) - retrieval을 위해 문맥 반영
-        String searchContext = queryRewriter.rewrite(req.content(), summary, history);
+        List<ChatMessage> questions = historyManager.getAllQuestions(chatRoom.getId());
+        timer.log("2-2. getAllQuestions");
 
-        // 4. 관련 지식 검색 (Retrieval) - 재작성된 쿼리 사용
-        List<EngineeringKnowledge> knowledges = retriever.retrieve(searchContext, req.productType());
+        // 3. Retrieval
+        List<EngineeringKnowledge> knowledges =
+                retriever.retrieve(req.content(), req.productType());
+        timer.log("3. retrieve");
 
-        // 5. 프롬프트 생성 (Prompt Construction) - 요약과 이전 이력 포함
-        String currentPrompt = promptProvider.createPrompt(req.content(), knowledges, summary, history);
+        // 4. Prompt 생성
+        String currentPrompt =
+                promptProvider.createPrompt(req.content(), knowledges, summary, questions);
+        timer.log("4. createPrompt");
+//        log.info("프롬포트는 : {}", currentPrompt);
 
-        // 6. OpenAI 호출 (Generation)
+        // 5. OpenAI 호출
         String answer = openAiClient.chat(currentPrompt);
+        timer.log("5. openAiChat");
 
-        // todo 결합도를 약하게 하기 위해서 비돋시 이벤트를 통한 데이터 저장.. 추후에 mq,kafka가 들어갈때 해당 부분을 수정 필요?
-        // 6. 비동기 프로세스 이벤트 발행 (메시지 저장 및 요약 갱신)
-        eventPublisher.publishEvent(new ChatProcessEvent(chatRoom.getId(), req.content(), answer));
+        // 6. 비동기 이벤트 발행
+        eventPublisher.publishEvent(
+                new ChatProcessEvent(chatRoom.getId(), req.content(), answer)
+        );
+        timer.log("6. publishEvent");
 
         return new AiChatRes(answer, chatRoom.getId());
+    }
+
+    public List<ChatRoomRes> getChatRooms(Long userId) {
+        return historyManager.getChatRoomsByUserId(userId).stream()
+                .map(room -> new ChatRoomRes(room.getId(), room.getCreatedAt()))
+                .toList();
+    }
+
+    public List<ChatMessageDetailRes> getChatMessages(Long chatRoomId) {
+        return historyManager.getChatMessagesByChatRoomId(chatRoomId).stream()
+                .map(msg -> new ChatMessageDetailRes(msg.getContent(), msg.getChatRole(), msg.getCreatedAt()))
+                .toList();
     }
 }

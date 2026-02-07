@@ -46,26 +46,25 @@ public class ChatHistoryManager {
                 .map(ChatSummary::getSummary);
     }
 
-    public Optional<List<ChatMessage>> getMessagesForSummaryUpdate(Long chatRoomId) {
-        if (!shouldUpdateSummary(chatRoomId)) {
-            return Optional.empty();
-        }
-        return Optional.of(getRecentMessages(chatRoomId));
-    }
-
-
     public List<ChatMessage> getRecentMessages(Long chatRoomId) {
         List<ChatMessage> messages = chatMessageRepository.findTop10ByChatRoomIdOrderByCreatedAtDesc(chatRoomId);
         Collections.reverse(messages);
         return messages;
     }
 
-    private boolean shouldUpdateSummary(Long chatRoomId) {
-        long messageCount = getMessageCount(chatRoomId);
-        return messageCount > 0 && messageCount % 10 == 0;
+    public List<ChatMessage> getAllQuestions(Long chatRoomId) {
+        return chatMessageRepository.findAllByChatRoomIdAndChatRoleOrderByCreatedAtAsc(chatRoomId, ChatRole.QUESTION);
     }
 
     public long getMessageCount(Long chatRoomId) {
         return chatMessageRepository.countByChatRoomId(chatRoomId);
+    }
+
+    public List<ChatRoom> getChatRoomsByUserId(Long userId) {
+        return chatRoomRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    public List<ChatMessage> getChatMessagesByChatRoomId(Long chatRoomId) {
+        return chatMessageRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
     }
 }

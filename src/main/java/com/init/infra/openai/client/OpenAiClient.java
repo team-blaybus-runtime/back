@@ -50,6 +50,17 @@ public class OpenAiClient {
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .map(node -> {
+                    // 토큰 사용량
+                    JsonNode usage = node.get("usage");
+                    int promptTokens = usage.get("prompt_tokens").asInt();
+                    int totalTokens = usage.get("total_tokens").asInt();
+
+                    log.info(
+                            "[OpenAI][EMBEDDING] tokens | prompt={}, total={}",
+                            promptTokens, totalTokens
+                    );
+
+                    // embedding 벡터
                     JsonNode arr = node.get("data").get(0).get("embedding");
                     float[] result = new float[arr.size()];
                     for (int i = 0; i < arr.size(); i++) {
@@ -63,8 +74,12 @@ public class OpenAiClient {
     public String chat(List<Map<String, String>> messages) {
         Map<String, Object> body = Map.of(
                 "model", chatModel,
-                "messages", messages
+                "messages", messages,
+                "temperature", 0.6
+//                "max_completion_tokens", 600
         );
+
+//        log.debug("OpenAI chat request: {}", body);
 
         return webClient.post()
                 .uri("/chat/completions")
@@ -73,6 +88,7 @@ public class OpenAiClient {
                 .bodyToMono(JsonNode.class)
                 .map(n -> n.get("choices").get(0).get("message").get("content").asText())
                 .block();
+
     }
 
     public String chat(String userPrompt) {
