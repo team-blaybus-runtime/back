@@ -1,7 +1,9 @@
 package com.init.global.config;
 
 import jakarta.persistence.EntityManagerFactory;
+
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -17,9 +19,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @EnableJpaRepositories(
         basePackages = {
-            "com.init.domain.persistence.user.repository",
-            "com.init.domain.persistence.oauth.repository",
-            "com.init.domain.persistence.engineering.repository"
+                "com.init.domain.persistence.user.repository",
+                "com.init.domain.persistence.oauth.repository",
+                "com.init.domain.persistence.engineering.repository",
+                "com.init.domain.persistence.memo.repository"
         },
         entityManagerFactoryRef = "mysqlEntityManagerFactory",
         transactionManagerRef = "mysqlTransactionManager"
@@ -43,7 +46,8 @@ public class MysqlDataSourceConfig {
                         "com.init.domain.persistence.user.entity",
                         "com.init.domain.persistence.oauth.entity",
                         "com.init.domain.persistence.common.model",
-                        "com.init.domain.persistence.engineering.entity"
+                        "com.init.domain.persistence.engineering.entity",
+                        "com.init.domain.persistence.memo.entity"
                 )
                 .persistenceUnit("mysql")
                 .build();
