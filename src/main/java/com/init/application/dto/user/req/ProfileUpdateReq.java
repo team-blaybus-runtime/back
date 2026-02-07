@@ -7,7 +7,11 @@ import jakarta.validation.constraints.Min;
 
 @Schema(title = "프로필 수정 요청 DTO")
 public record ProfileUpdateReq(
-        @Schema(title = "닉네임", example = "홍길동")
+        @Schema(
+                title = "닉네임",
+                description = "한글, 영문, 숫자만을 사용하여 2~10자로 입력되어야 합니다",
+                example = "홍길동"
+        )
         @Nickname
         String nickname,
         @Schema(description = "전공", example = "컴퓨터공학과")
