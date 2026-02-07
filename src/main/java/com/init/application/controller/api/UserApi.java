@@ -2,6 +2,7 @@ package com.init.application.controller.api;
 
 import com.init.application.dto.user.req.NicknameCheckReq;
 import com.init.application.dto.user.req.NicknameUpdateReq;
+import com.init.application.dto.user.req.ProfileUpdateReq;
 import com.init.application.dto.user.res.UserDetailRes;
 import com.init.infra.security.authentication.SecurityUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,4 +29,8 @@ public interface UserApi {
     @Operation(summary = "닉네임 변경")
     void updatePassword(SecurityUserDetails user,
                         NicknameUpdateReq nicknameUpdateReq);
+
+    @Operation(summary = "프로필 변경")
+    void updateProfile(SecurityUserDetails user,
+                       ProfileUpdateReq req);
 }
