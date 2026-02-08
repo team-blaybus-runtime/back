@@ -1,13 +1,7 @@
 package com.init.domain.persistence.user.entity;
 
 import com.init.domain.persistence.common.model.DateAuditable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +10,7 @@ import org.hibernate.annotations.Comment;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 @Entity
 public class User extends DateAuditable {
     @Id
@@ -34,6 +29,7 @@ public class User extends DateAuditable {
     private Integer grade;
     @Comment("목표")
     private String goal;
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
 

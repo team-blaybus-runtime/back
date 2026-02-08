@@ -33,7 +33,7 @@ public class EngineeringKnowledgeRetriever {
     public List<EngineeringKnowledge> retrieve(String question, ProductType productType) {
         float[] embed = openAiClient.embed(question);
 
-        // 1. 벡터 데이터베이스(Postgres)에서 유사한 지식의 ID 검색
+        // 1. 데이터베이스에서 유사한 지식의 ID 검색
         List<EngineeringKnowledgeEmbedding> embeddings = engineeringKnowledgeEmbeddingRepo.searchSimilar(embed, productType.name());
 
         List<Long> ids = embeddings.stream()
@@ -47,7 +47,7 @@ public class EngineeringKnowledgeRetriever {
                     .toList();
         }
 
-        // 2. 검색된 ID를 바탕으로 메타데이터 데이터베이스(MySQL)에서 상세 정보 조회
+        // 2. 검색된 ID를 바탕으로 데이터베이스에서 상세 정보 조회
         List<EngineeringKnowledge> knowledges = engineeringKnowledgeRepo.findAllById(ids);
 
         // 정렬 순서 유지 (Postgres에서 넘어온 유사도 순서대로)
