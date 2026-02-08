@@ -40,6 +40,7 @@ public class MemoService {
                 .map(memo -> new MemoReadRes(
                         memo.getId(),
                         memo.getTitle(),
+                        memo.getProductType().getDescription(),
                         memo.getContent(),
                         memo.getUpdatedAt()
                 ))

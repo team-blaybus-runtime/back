@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public record MemoReadRes(
         @Schema(title = "메모 ID", example = "1")
         Long memoId,
+        @Schema(title = "제품 유형", example = "Drone")
+        String productTypeDesc,
         @Schema(title = "메모 제목", example = "구조 설명")
         String title,
         @Schema(title = "메모 내용", example = "이건 이렇고, 저건 저렇고~")
