@@ -1,6 +1,6 @@
 package com.init.domain.business.userstudyhis.service;
 
-import com.init.application.dto.userstudyhis.req.UserStudyHisCreateReq;
+import com.init.application.dto.userstudyhis.req.UserStudyHisCreateOrUpdateReq;
 import com.init.application.dto.userstudyhis.res.UserStudyHisReadRes;
 import com.init.domain.business.common.service.EntitySimpReadService;
 import com.init.domain.business.engineering.service.ProductImageUrlMapper;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,13 +23,16 @@ public class UserStudyHisService {
     private final ProductImageUrlMapper productImageUrlMapper;
 
     @Transactional
-    public void create(Long userId, UserStudyHisCreateReq req) {
-        User user = entitySimpReadService.findUser(userId);
-        UserStudyHis userStudyHis = UserStudyHis.of(
-                user, req.productType(), req.title(), req.viewInfo()
-        );
-
-        userStudyHisRepository.save(userStudyHis);
+    public void createOrUpdate(Long userId, UserStudyHisCreateOrUpdateReq req) {
+        Optional<UserStudyHis> userStudyHis = userStudyHisRepository.findByUserIdAndProductType(userId, req.productType());
+        if (userStudyHis.isPresent()) {
+            userStudyHis.get().update(req.title(), req.viewInfo());
+        } else {
+            User user = entitySimpReadService.findUser(userId);
+            userStudyHisRepository.save(
+                    UserStudyHis.of(user, req.productType(), req.title(), req.viewInfo())
+            );
+        }
     }
 
     @Transactional(readOnly = true)

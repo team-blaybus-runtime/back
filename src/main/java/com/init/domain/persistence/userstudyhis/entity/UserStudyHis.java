@@ -57,4 +57,9 @@ public class UserStudyHis extends DateAuditable {
         userStudyHis.viewInfo = viewInfo;
         return userStudyHis;
     }
+
+    public void update(String title, Map<String, Object> viewInfo) {
+        this.title = title;
+        this.viewInfo = viewInfo;
+    }
 }

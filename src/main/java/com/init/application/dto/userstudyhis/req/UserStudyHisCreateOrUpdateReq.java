@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Map;
 
-@Schema(title = "사용자 학습 이력 생성 요청 DTO")
-public record UserStudyHisCreateReq(
+@Schema(title = "사용자 학습 이력 생성 및 수정 요청 DTO")
+public record UserStudyHisCreateOrUpdateReq(
         @Schema(description = "제품", example = "Drone")
         @NotNull
         ProductType productType,
