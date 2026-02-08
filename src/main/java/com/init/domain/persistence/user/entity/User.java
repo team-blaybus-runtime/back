@@ -55,10 +55,13 @@ public class User extends DateAuditable {
         this.nickname = nickname;
     }
 
-    public void updateProfile(String nickname, String major, Integer grade, String goal) {
+    public void updateProfileAndSetRoleUser(String nickname, String major, Integer grade, String goal) {
         this.nickname = nickname;
         this.major = major;
         this.grade = grade;
         this.goal = goal;
+        this.role = Role.USER;
     }
+
+
 }

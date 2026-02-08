@@ -34,7 +34,7 @@ public class UserService {
         if (userRepository.existsByUsername(username))
             throw new GlobalException(UserErrorCode.CONFLICT_USERNAME);
 
-        User user = User.of(username, encryptedPassword, Role.USER);
+        User user = User.of(username, encryptedPassword, Role.GUEST);
         return userRepository.save(user);
     }
 
@@ -87,7 +87,7 @@ public class UserService {
     @Transactional
     public void updateProfile(Long userId, ProfileUpdateReq req) {
         User user = entitySimpReadService.findUser(userId);
-        user.updateProfile(
+        user.updateProfileAndSetRoleUser(
                 req.nickname(), req.major(), req.grade(), req.goal()
         );
     }
