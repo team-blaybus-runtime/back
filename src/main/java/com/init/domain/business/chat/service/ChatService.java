@@ -3,9 +3,11 @@ package com.init.domain.business.chat.service;
 import com.init.application.dto.chat.req.ChatReq;
 import com.init.application.dto.chat.res.AiChatRes;
 import com.init.application.dto.chat.res.ChatMessageDetailRes;
+import com.init.application.dto.chat.res.ChatMessagesRes;
 import com.init.domain.business.chat.event.ChatProcessEvent;
 import com.init.domain.business.userstudyhis.service.UserStudyHisService;
 import com.init.domain.persistence.chat.entity.ChatMessage;
+import com.init.domain.persistence.chat.repository.ChatMessageRepository;
 import com.init.domain.persistence.engineering.entity.EngineeringKnowledge;
 import com.init.domain.persistence.userstudyhis.entity.UserStudyHis;
 import com.init.infra.openai.client.OpenAiClient;
@@ -13,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -31,6 +34,7 @@ public class ChatService {
     private final ChatHistoryManager historyManager;
     private final ApplicationEventPublisher eventPublisher;
     private final UserStudyHisService userStudyHisService;
+    private final ChatMessageRepository chatMessageRepository;
 
     public AiChatRes chat(Long userId, ChatReq req) {
         // 1-4. 공통 준비 과정
@@ -87,12 +91,14 @@ public class ChatService {
         return new ChatPreparation(userStudyHis.getId(), currentPrompt);
     }
 
-    private record ChatPreparation(Long userHisId, String currentPrompt) {}
-
-
-    public List<ChatMessageDetailRes> getChatMessages(Long chatRoomId) {
-        return historyManager.getChatMessagesByUserHisId(chatRoomId).stream()
-                .map(msg -> new ChatMessageDetailRes(msg.getContent(), msg.getChatRole(), msg.getCreatedAt()))
-                .toList();
+    public ChatMessagesRes getChatHistory(Long userId, Long historyId, Long lastId, String order, Integer limit) {
+        Slice<ChatMessage> chatMessages = chatMessageRepository.findByUserIdAndHistoryId(userId, historyId, lastId, order, limit);
+        Slice<ChatMessageDetailRes> responseSlice = chatMessages.map(msg ->
+                new ChatMessageDetailRes(msg.getId(),msg.getContent(), msg.getChatRole(), msg.getCreatedAt())
+        );
+        return ChatMessagesRes.from(responseSlice);
     }
+
+    private record ChatPreparation(Long userHisId, String currentPrompt) {}
+    
 }

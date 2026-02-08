@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 
 @Schema(description = "채팅 메시지 상세 응답 DTO")
 public record ChatMessageDetailRes(
+
+        @Schema(description = "메시지 ID")
+        Long chatMessageId,
+
         @Schema(description = "메시지 내용")
         String content,
 
