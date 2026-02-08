@@ -43,4 +43,7 @@ public class EngineeringKnowledge {
 
     @Comment("에셋 파일 저장 주소")
     private String assetUrl;
+
+    @Comment("파츠 이미지 저장 주소")
+    private String imageUrl;
 }
