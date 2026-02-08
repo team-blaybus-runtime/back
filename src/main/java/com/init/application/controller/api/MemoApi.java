@@ -16,7 +16,7 @@ public interface MemoApi {
     void create(SecurityUserDetails userDetails,
                 MemoCreateReq req);
 
-    @Operation(summary = "메모 조회")
+    @Operation(summary = "메모 조회", description = "ProductType을 지정하지 않을 경우 전체 메모를 조회합니다.")
     List<MemoReadRes> read(SecurityUserDetails userDetails,
                            ProductType productType);
 
