@@ -1,6 +1,5 @@
 package com.init.application.controller.api;
 
-import com.init.application.dto.user.req.NicknameCheckReq;
 import com.init.application.dto.user.req.NicknameUpdateReq;
 import com.init.application.dto.user.req.ProfileUpdateReq;
 import com.init.application.dto.user.res.UserDetailRes;
@@ -11,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "[유저 API]")
 public interface UserApi {
@@ -21,12 +19,6 @@ public interface UserApi {
 
     @Operation(summary = "전체 회원 조회")
     List<UserDetailRes> readUserDetails();
-
-    @Operation(summary = "유저 아이디 중복 확인")
-    Map<String, Boolean> isDuplicatedUsername(String username);
-
-    @Operation(summary = "닉네임 중복 확인")
-    Map<String, Boolean> isDuplicatedNickname(NicknameCheckReq nicknameCheckReq);
 
     @Operation(summary = "닉네임 변경")
     void updatePassword(SecurityUserDetails user,

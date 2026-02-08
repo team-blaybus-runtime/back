@@ -35,18 +35,6 @@ public class UserController implements UserApi {
     }
 
     @Override
-    @GetMapping("/users/username")
-    public Map<String, Boolean> isDuplicatedUsername(@RequestParam @Validated String username) {
-        return Map.of("isDuplicated", userService.isDuplicatedUsername(username));
-    }
-
-    @Override
-    @GetMapping("/users/nickname")
-    public Map<String, Boolean> isDuplicatedNickname(@Validated NicknameCheckReq req) {
-        return Map.of("isDuplicated", userService.isDuplicatedNickname(req));
-    }
-
-    @Override
     @PutMapping("/users/nickname")
     public void updatePassword(@AuthenticationPrincipal SecurityUserDetails user,
                                @RequestBody NicknameUpdateReq req) {
