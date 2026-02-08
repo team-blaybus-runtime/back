@@ -8,11 +8,11 @@ public record AiChatRes(
         String answer,
 
         @Schema(description = "채팅방 ID")
-        Long chatRoomId
+        Long userHisId
 
 ) {
-    public AiChatRes(String answer, Long chatRoomId) {
+    public AiChatRes(String answer, Long userHisId) {
         this.answer = answer;
-        this.chatRoomId = chatRoomId;
+        this.userHisId = userHisId;
     }
 }

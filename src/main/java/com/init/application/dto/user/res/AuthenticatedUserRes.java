@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record AuthenticatedUserRes(
         @Schema(title = "유저 ID", example = "1")
         Long userId,
-        @Schema(title = "유저 역할", example = "ROLE_USER")
+        @Schema(title = "유저 역할", example = "ROLE_ADMIN, ROLE_USER, ROLE_GUEST")
         String roleType,
         @Schema(title = "액세스 토큰", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
         String accessToken,

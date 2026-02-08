@@ -3,6 +3,7 @@ package com.init.domain.business.user.service;
 
 import com.init.application.dto.user.req.NicknameCheckReq;
 import com.init.application.dto.user.req.NicknameUpdateReq;
+import com.init.application.dto.user.req.ProfileUpdateReq;
 import com.init.application.dto.user.res.UserDetailRes;
 import com.init.application.mapper.UserMapper;
 import com.init.domain.business.common.service.EntitySimpReadService;
@@ -23,17 +24,17 @@ public class UserService {
     private final EntitySimpReadService entitySimpReadService;
     private final UserRepository userRepository;
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public User saveGuest() {
         return userRepository.save(User.of(Role.GUEST));
     }
 
     @Transactional
-    public User saveUserWithEncryptedPassword(String nickname, String username, String encryptedPassword) {
+    public User saveUserWithEncryptedPassword(String username, String encryptedPassword) {
         if (userRepository.existsByUsername(username))
             throw new GlobalException(UserErrorCode.CONFLICT_USERNAME);
 
-        User user = User.of(nickname, username, encryptedPassword, Role.USER);
+        User user = User.of(username, encryptedPassword, Role.GUEST);
         return userRepository.save(user);
     }
 
@@ -81,5 +82,18 @@ public class UserService {
     @Transactional(readOnly = true)
     public boolean isDuplicatedNickname(NicknameCheckReq req) {
         return userRepository.existsByNickname(req.nickname());
+    }
+
+    @Transactional
+    public void updateProfile(Long userId, ProfileUpdateReq req) {
+        User user = entitySimpReadService.findUser(userId);
+        user.updateProfileAndSetRoleUser(
+                req.nickname(), req.major(), req.grade(), req.goal()
+        );
+    }
+
+    @Transactional
+    public void delete(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

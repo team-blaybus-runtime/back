@@ -8,6 +8,15 @@ import com.init.global.annotation.Mapper;
 @Mapper
 public final class UserMapper {
     public static UserDetailRes toDetailRes(User user) {
-        return new UserDetailRes(user.getId(), user.getUsername());
+        return new UserDetailRes(
+                user.getId(),
+                user.getNickname(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getMajor(),
+                user.getGrade(),
+                user.getGoal(),
+                user.getRole()
+        );
     }
 }

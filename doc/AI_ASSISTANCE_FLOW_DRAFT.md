@@ -12,7 +12,7 @@
 사용자가 질문을 던졌을 때 서버 내부에서 일어나는 상세 단계입니다.
 
 #### ① 문맥 로드 및 준비 (Preparation)
-1.  **세션 확인**: 요청된 `chatRoomId`를 확인하고, 없으면 새로운 `ChatRoom`을 생성합니다.
+1.  **세션 확인**: 요청된 `userHisId`를 확인하고, 없으면 새로운 `ChatRoom`을 생성합니다.
 2.  **데이터 로드**: 해당 채팅방의 **이전 대화 요약(Summary)**과 **최근 10개의 대화 이력(History)**을 DB에서 불러옵니다.
 
 #### ② 쿼리 재작성 (Query Rewriting)
@@ -80,12 +80,12 @@
 #### 요청 객체 (ChatReq)
 *   `content` (String): 사용자 질문 내용 (필수)
 *   `productType` (Enum): 제품 분류 (예: `Drone`, `Robot_Arm` 등) (필수)
-*   `chatRoomId` (Long): 채팅방 ID. **최초 질문 시 생략**, 대화 이어가기 시 필수.
+*   `userHisId` (Long): 채팅방 ID. **최초 질문 시 생략**, 대화 이어가기 시 필수.
 *   `userId` (Long): 현재는 DTO로 전달 (추후 보안 적용 시 인증 정보에서 자동 추출 예정).
 
 #### 응답 객체 (AiChatRes)
 *   `answer` (String): AI가 생성한 답변
-*   `chatRoomId` (Long): 해당 대화가 속한 채팅방 ID
+*   `userHisId` (Long): 해당 대화가 속한 채팅방 ID
 
 ---
 
@@ -94,7 +94,7 @@
 #### 시나리오 A: 새로운 대화 시작 (New Session)
 새로운 주제로 대화를 시작할 때의 흐름입니다.
 
-1.  **API 호출**: `chatRoomId`를 제외하고 요청을 보냅니다.
+1.  **API 호출**: `userHisId`를 제외하고 요청을 보냅니다.
     ```json
     {
       "content": "드론 프레임의 메인 재질이 무엇인가요?",
@@ -102,35 +102,35 @@
       "userId": 1
     }
     ```
-2.  **서버 응답**: 새로운 `chatRoomId`와 함께 답변이 반환됩니다.
+2.  **서버 응답**: 새로운 `userHisId`와 함께 답변이 반환됩니다.
     ```json
     {
       "answer": "드론 프레임은 주로 탄소 섬유(Carbon Fiber) 재질로 제작됩니다...",
-       "chatRoomId": 102
+       "userHisId": 102
     }
     ```
-3.  **클라이언트 처리**: 반환된 `chatRoomId: 101`을 로컬 변수나 상태에 저장합니다.
+3.  **클라이언트 처리**: 반환된 `userHisId: 101`을 로컬 변수나 상태에 저장합니다.
 
 ---
 
 #### 시나리오 B: 기존 대화 이어가기 (Context Persistence)
 이전 질문의 맥락(Context)을 유지하며 추가 질문을 할 때의 흐름입니다.
 
-1.  **API 호출**: 이전 응답에서 받은 `chatRoomId`를 포함하여 요청을 보냅니다.
+1.  **API 호출**: 이전 응답에서 받은 `userHisId`를 포함하여 요청을 보냅니다.
     ```json
     {
       "content": "그 재질의 장점과 단점을 알려줘.",
       "productType": "Drone",
-      "chatRoomId": 101,
+      "userHisId": 101,
       "userId": 1
     }
     ```
-    *   **포인트**: 사용자가 "그 재질"이라고만 해도, 서버는 `chatRoomId: 101`의 이력을 조회하여 이를 "탄소 섬유"로 해석(Query Rewriting)합니다.
+    *   **포인트**: 사용자가 "그 재질"이라고만 해도, 서버는 `userHisId: 101`의 이력을 조회하여 이를 "탄소 섬유"로 해석(Query Rewriting)합니다.
 2.  **서버 응답**: 동일한 세션 ID와 함께 문맥이 반영된 답변이 반환됩니다.
     ```json
     {
        "answer": "탄소 섬유(Carbon Fiber)의 주요 장점은 경량화와 고강성입니다. 반면 단점으로는...",
-       "chatRoomId": 101
+       "userHisId": 101
     }
     ```
 

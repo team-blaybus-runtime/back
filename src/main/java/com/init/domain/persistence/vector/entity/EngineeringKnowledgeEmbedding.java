@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 public class EngineeringKnowledgeEmbedding {
 
     @Id
-    @Comment("MySQL의 EngineeringKnowledge ID")
+    @Comment("EngineeringKnowledge ID")
     private Long knowledgeId;
 
     @Column(columnDefinition = "vector(1536)")
