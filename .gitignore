@@ -36,6 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
+/src/main/generated
 ### Custom ###
 node_modules
 docker

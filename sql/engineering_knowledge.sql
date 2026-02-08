@@ -1,4 +1,4 @@
-insert into init.engineering_knowledge (id, category, content, equipment, material, part_name, system_classification, product_type)
+insert into public.engineering_knowledge (id, category, content, equipment, material, part_name, system_classification, product_type)
 values  (1, 'Quadcopter Drone', '[KO]
 Arm Gear는 드론의 모터 출력축과 암(Arm) 내부 구동부를 연결하는 기어이다.
 모터에서 발생한 회전력을 프로펠러로 효율적으로 전달하며,

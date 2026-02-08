@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ChatSummaryRepository extends JpaRepository<ChatSummary, Long> {
-    Optional<ChatSummary> findByChatRoomId(Long chatRoomId);
+    Optional<ChatSummary> findByUserStudyHisId(Long userHisId);
 }

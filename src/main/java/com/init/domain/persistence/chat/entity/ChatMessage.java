@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Table(name = "chat_message")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ChatMessage extends DateAuditable {
@@ -23,12 +24,12 @@ public class ChatMessage extends DateAuditable {
     @Enumerated(EnumType.STRING)
     private ChatRole chatRole;
 
-    private Long chatRoomId;
+    private Long userHisId;
 
     @Builder
-    public ChatMessage(String content, ChatRole chatRole, Long chatRoomId) {
+    public ChatMessage(String content, ChatRole chatRole, Long userHisId) {
         this.content = content;
         this.chatRole = chatRole;
-        this.chatRoomId = chatRoomId;
+        this.userHisId = userHisId;
     }
 }
