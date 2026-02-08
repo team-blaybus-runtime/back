@@ -39,8 +39,8 @@ public class MemoService {
         return memos.stream()
                 .map(memo -> new MemoReadRes(
                         memo.getId(),
-                        memo.getTitle(),
                         memo.getProductType().getDescription(),
+                        memo.getTitle(),
                         memo.getContent(),
                         memo.getUpdatedAt()
                 ))
