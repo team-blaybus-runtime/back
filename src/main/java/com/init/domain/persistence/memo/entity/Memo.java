@@ -11,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -35,6 +36,7 @@ public class Memo extends DateAuditable {
     private ProductType productType;
     @Comment("메모 제목")
     private String title;
+    @Column(columnDefinition = "TEXT")
     @Comment("메모 내용")
     private String content;
 
