@@ -6,9 +6,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 @Entity
 public class User extends DateAuditable {
     @Id
@@ -21,12 +23,18 @@ public class User extends DateAuditable {
     @ColumnDefault("NULL")
     private String password;
     private String nickname;
+    @Comment("전공")
+    private String major;
+    @Comment("학년")
+    private Integer grade;
+    @Comment("목표")
+    private String goal;
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static User of(String nickname, String username, String password, Role role) {
+    public static User of(String username, String password, Role role) {
         User user = new User();
-        user.nickname = nickname;
         user.username = username;
         user.password = password;
         user.role = role;
@@ -45,5 +53,12 @@ public class User extends DateAuditable {
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateProfile(String nickname, String major, Integer grade, String goal) {
+        this.nickname = nickname;
+        this.major = major;
+        this.grade = grade;
+        this.goal = goal;
     }
 }
