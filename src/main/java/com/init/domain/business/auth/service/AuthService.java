@@ -32,7 +32,7 @@ public class AuthService {
             throw new GlobalException(AuthErrorCode.PASSWORD_CONFIRM_MISMATCH);
 
         User user = userService.saveUserWithEncryptedPassword(
-                req.username(), bCryptPasswordEncoder.encode(req.password())
+                req.email(), bCryptPasswordEncoder.encode(req.password())
         );
 
         return Triple.of(user.getId(), user.getRole(), jwtHelper.createToken(user));
@@ -44,7 +44,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public Triple<Long, Role, Jwts> signIn(AuthSignInReq req) {
-        User user = userService.readUserByUsername(req.username());
+        User user = userService.readUserByUsername(req.email());
 
         validatePassword(req.password(), user.getPassword());
 
