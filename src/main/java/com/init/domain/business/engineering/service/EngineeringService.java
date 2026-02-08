@@ -33,6 +33,7 @@ public class EngineeringService {
                 .map(knowledge -> new EngineeringPartReadRes(
                         knowledge.getPartName(),
                         extractKoreanContent(knowledge.getContent()),
+                        knowledge.getAssetUrl(),
                         knowledge.getImageUrl()
                 ))
                 .toList();

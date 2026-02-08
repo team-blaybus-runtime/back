@@ -8,6 +8,8 @@ public record EngineeringPartReadRes(
         String partName,
         @Schema(title = "부품 설명", example = "로봇 팔의 주요 기어 부품입니다.")
         String content,
+        @Schema(title = "부품 에셋 파일 URL", example = "http://example.com/assets/arm_gear.glb")
+        String assetUrl,
         @Schema(title = "부품 이미지 URL", example = "http://example.com/images/arm_gear.png")
         String imageUrl
 ) {
