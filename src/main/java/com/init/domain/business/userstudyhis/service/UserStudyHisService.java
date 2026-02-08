@@ -54,4 +54,9 @@ public class UserStudyHisService {
                 })
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public UserStudyHis getUserHistoryId(Long historyId){
+        return userStudyHisRepository.findById(historyId).orElse(null);
+    }
 }

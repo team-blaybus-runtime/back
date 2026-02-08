@@ -11,9 +11,7 @@ public record ChatReq(
         @Schema(description = "제품 타입", example = "Drone")
         ProductType productType,
 
-        @Schema(description = "채팅방 ID (기존 대화 이어하기용, 없을 경우 새로 생성)", example = "1")
-        Long chatRoomId,
-
-        Long userId
+        @Schema(description = "학습 기록 ID", example = "1")
+        Long chatHistoryId
 ) {
 }

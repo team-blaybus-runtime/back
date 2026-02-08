@@ -1,10 +1,12 @@
 package com.init.domain.persistence.chat.entity;
 
 import com.init.domain.persistence.common.model.DateAuditable;
+import com.init.domain.persistence.userstudyhis.entity.UserStudyHis;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@Table(name = "chat_summary")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ChatSummary extends DateAuditable {
@@ -15,21 +17,20 @@ public class ChatSummary extends DateAuditable {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id", nullable = false, unique = true)
-    private ChatRoom chatRoom;
+    @JoinColumn
+    private UserStudyHis userStudyHis;
 
     @Setter
     @Column(columnDefinition = "text")
     private String summary;
 
-    // 선택: 요약 임베딩 (고급)
     @Setter
     @Column(columnDefinition = "vector(1536)")
     private float[] summaryEmbedding;
 
     @Builder
-    public ChatSummary(ChatRoom chatRoom, String summary, float[] summaryEmbedding) {
-        this.chatRoom = chatRoom;
+    public ChatSummary(UserStudyHis userStudyHis, String summary, float[] summaryEmbedding) {
+        this.userStudyHis = userStudyHis;
         this.summary = summary;
         this.summaryEmbedding = summaryEmbedding;
     }

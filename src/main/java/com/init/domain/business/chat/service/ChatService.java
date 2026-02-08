@@ -3,12 +3,11 @@ package com.init.domain.business.chat.service;
 import com.init.application.dto.chat.req.ChatReq;
 import com.init.application.dto.chat.res.AiChatRes;
 import com.init.application.dto.chat.res.ChatMessageDetailRes;
-import com.init.application.dto.chat.res.ChatRoomRes;
 import com.init.domain.business.chat.event.ChatProcessEvent;
+import com.init.domain.business.userstudyhis.service.UserStudyHisService;
 import com.init.domain.persistence.chat.entity.ChatMessage;
-import com.init.domain.persistence.chat.entity.ChatRoom;
 import com.init.domain.persistence.engineering.entity.EngineeringKnowledge;
-import com.init.global.util.StepTimer;
+import com.init.domain.persistence.userstudyhis.entity.UserStudyHis;
 import com.init.infra.openai.client.OpenAiClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,7 @@ public class ChatService {
     private final EngineeringChatPromptProvider promptProvider;
     private final ChatHistoryManager historyManager;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserStudyHisService userStudyHisService;
 
     public AiChatRes chat(Long userId, ChatReq req) {
         // 1-4. 공통 준비 과정
@@ -41,10 +41,10 @@ public class ChatService {
 
         // 6. 비동기 이벤트 발행
         eventPublisher.publishEvent(
-                new ChatProcessEvent(preparation.chatRoomId(), req.content(), answer)
+                new ChatProcessEvent(preparation.userHisId(), req.content(), answer)
         );
 
-        return new AiChatRes(answer, preparation.chatRoomId());
+        return new AiChatRes(answer, preparation.userHisId());
     }
 
     public Flux<AiChatRes> chatStream(Long userId, ChatReq req) {
@@ -57,23 +57,24 @@ public class ChatService {
                 .map(chunks -> {
                     String combined = String.join("", chunks);
                     fullAnswer.append(combined);
-                    return new AiChatRes(combined, preparation.chatRoomId());
+                    return new AiChatRes(combined, preparation.userHisId());
                 })
                 .doOnComplete(() -> {
+                    log.info("Chat Stream Completed: {}", preparation.userHisId());
                     eventPublisher.publishEvent(
-                            new ChatProcessEvent(preparation.chatRoomId(), req.content(), fullAnswer.toString())
+                            new ChatProcessEvent(preparation.userHisId(), req.content(), fullAnswer.toString())
                     );
                 });
     }
 
     private ChatPreparation prepareChat(Long userId, ChatReq req) {
         // 1. ChatRoom 확인/생성
-        ChatRoom chatRoom = historyManager.getOrCreateChatRoom(userId, req.chatRoomId());
+        UserStudyHis userStudyHis = userStudyHisService.getUserHistoryId(req.chatHistoryId());
 
         // 2. 이전 요약 및 최근 대화 로드
-        String summary = historyManager.getSummary(chatRoom.getId()).orElse(null);
+        String summary = historyManager.getSummary(userStudyHis.getId()).orElse(null);
 
-        List<ChatMessage> questions = historyManager.getAllQuestions(chatRoom.getId());
+        List<ChatMessage> questions = historyManager.getAllQuestions(userStudyHis.getId());
 
         // 3. Retrieval
         List<EngineeringKnowledge> knowledges =
@@ -83,19 +84,14 @@ public class ChatService {
         String currentPrompt =
                 promptProvider.createPrompt(req.content(), knowledges, summary, questions);
 
-        return new ChatPreparation(chatRoom.getId(), currentPrompt);
+        return new ChatPreparation(userStudyHis.getId(), currentPrompt);
     }
 
-    private record ChatPreparation(Long chatRoomId, String currentPrompt) {}
+    private record ChatPreparation(Long userHisId, String currentPrompt) {}
 
-    public List<ChatRoomRes> getChatRooms(Long userId) {
-        return historyManager.getChatRoomsByUserId(userId).stream()
-                .map(room -> new ChatRoomRes(room.getId(), room.getCreatedAt()))
-                .toList();
-    }
 
     public List<ChatMessageDetailRes> getChatMessages(Long chatRoomId) {
-        return historyManager.getChatMessagesByChatRoomId(chatRoomId).stream()
+        return historyManager.getChatMessagesByUserHisId(chatRoomId).stream()
                 .map(msg -> new ChatMessageDetailRes(msg.getContent(), msg.getChatRole(), msg.getCreatedAt()))
                 .toList();
     }

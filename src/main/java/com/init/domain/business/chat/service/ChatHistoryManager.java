@@ -2,9 +2,7 @@ package com.init.domain.business.chat.service;
 
 import com.init.domain.persistence.chat.entity.ChatMessage;
 import com.init.domain.persistence.chat.entity.ChatRole;
-import com.init.domain.persistence.chat.entity.ChatRoom;
 import com.init.domain.persistence.chat.repository.ChatMessageRepository;
-import com.init.domain.persistence.chat.repository.ChatRoomRepository;
 import com.init.domain.persistence.chat.repository.ChatSummaryRepository;
 import com.init.domain.persistence.chat.entity.ChatSummary;
 import com.init.global.annotation.Helper;
@@ -21,50 +19,37 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatHistoryManager {
 
-    private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatSummaryRepository chatSummaryRepository;
 
-    public ChatRoom getOrCreateChatRoom(Long userId, Long chatRoomId) {
-        if (chatRoomId != null) {
-            return chatRoomRepository.findById(chatRoomId)
-                    .orElseGet(() -> chatRoomRepository.save(ChatRoom.builder().userId(userId).build()));
-        }
-        return chatRoomRepository.save(ChatRoom.builder().userId(userId).build());
-    }
-
-    public void saveMessage(Long chatRoomId, String content, ChatRole role) {
+    public void saveMessage(Long userHisId, String content, ChatRole role) {
         chatMessageRepository.save(ChatMessage.builder()
-                .chatRoomId(chatRoomId)
+                .userHisId(userHisId)
                 .content(content)
                 .chatRole(role)
                 .build());
     }
 
-    public Optional<String> getSummary(Long chatRoomId) {
-        return chatSummaryRepository.findByChatRoomId(chatRoomId)
+    public Optional<String> getSummary(Long userHisId) {
+        return chatSummaryRepository.findByUserStudyHisId(userHisId)
                 .map(ChatSummary::getSummary);
     }
 
-    public List<ChatMessage> getRecentMessages(Long chatRoomId) {
-        List<ChatMessage> messages = chatMessageRepository.findTop10ByChatRoomIdOrderByCreatedAtDesc(chatRoomId);
+    public List<ChatMessage> getRecentMessages(Long userHisId) {
+        List<ChatMessage> messages = chatMessageRepository.findTop10ByUserHisIdOrderByCreatedAtDesc(userHisId);
         Collections.reverse(messages);
         return messages;
     }
 
-    public List<ChatMessage> getAllQuestions(Long chatRoomId) {
-        return chatMessageRepository.findAllByChatRoomIdAndChatRoleOrderByCreatedAtAsc(chatRoomId, ChatRole.QUESTION);
+    public List<ChatMessage> getAllQuestions(Long userHisId) {
+        return chatMessageRepository.findAllByUserHisIdAndChatRoleOrderByCreatedAtAsc(userHisId, ChatRole.QUESTION);
     }
 
-    public long getMessageCount(Long chatRoomId) {
-        return chatMessageRepository.countByChatRoomId(chatRoomId);
+    public long getMessageCount(Long userHisId) {
+        return chatMessageRepository.countByUserHisId(userHisId);
     }
 
-    public List<ChatRoom> getChatRoomsByUserId(Long userId) {
-        return chatRoomRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
-    }
-
-    public List<ChatMessage> getChatMessagesByChatRoomId(Long chatRoomId) {
-        return chatMessageRepository.findAllByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
+    public List<ChatMessage> getChatMessagesByUserHisId(Long userHisId) {
+        return chatMessageRepository.findAllByUserHisIdOrderByCreatedAtAsc(userHisId);
     }
 }
