@@ -48,8 +48,14 @@ public class EngineeringKnowledgeRetriever {
                     .toList();
         }
 
-        // 2. 검색된 ID를 바탕으로 데이터베이스에서 상세 정보 조회
-        List<EngineeringKnowledge> knowledges = engineeringKnowledgeRepo.findAllById(ids);
+        // 2. 검색된 ID를 바탕으로 데이터베이스에서 상세 정보 조회 (챗봇용: 좌표값 제외)
+        List<EngineeringKnowledge> knowledges;
+        try {
+            knowledges = engineeringKnowledgeRepo.findAllByIdsWithoutPosition(ids);
+        } catch (Exception e) {
+            // DB 조회 시 에러 발생 시(예: 역직렬화 에러 등) 빈 리스트로 반환하여 서비스 중단 방지
+            return java.util.Collections.emptyList();
+        }
 
         // 정렬 순서 유지 (Postgres에서 넘어온 유사도 순서대로)
         return sortKnowledgesByIds(knowledges, ids);
