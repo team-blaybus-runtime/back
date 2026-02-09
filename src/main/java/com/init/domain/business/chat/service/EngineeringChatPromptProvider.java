@@ -175,33 +175,25 @@ public class EngineeringChatPromptProvider {
                               ---
 
                               [Chat UI–Friendly Markdown Rules]
-                              - Use Markdown optimized for chat and mobile UI.
-                              - Use at most:
-                                - One top-level heading (#)
-                                - Second-level headings (##) only if necessary
-                              - Do NOT use emojis or horizontal rules.
+                              - Use standard CommonMark/GFM syntax for compatibility.
+                              - Use **Bold** or `###` for sub-headings to create clear visual hierarchy.
+                              - Group related technical points (e.g., failure modes) using bullet lists (-).
+                              - Tight Spacing: Use exactly one empty line between blocks (paragraphs, lists).
+                              - NEVER use more than one consecutive empty line (no double empty lines).
                               - Avoid deep list nesting (maximum depth: 1).
+                              - Do NOT use emojis or horizontal rules (---).
 
                               Allowed:
-                              - Bullet lists (-)
-                              - Numbered lists (1., 2., 3.)
-                              - **Bold** for emphasis
-                              - `Inline code` for technical identifiers
-
-                              Disallowed:
-                              - Emojis
-                              - Decorative formatting
-                              - Meta commentary
+                              - Bullet lists (-), Numbered lists (1., 2., 3.)
+                              - **Bold** for emphasis and sub-headers
+                              - `Inline code` for technical IDs
+                              - `###` for significant section breaks
 
                               ---
 
                               [Content Structuring Guidance]
-                              - Definition → role, characteristics
-                              - Mechanism → physical behavior, interactions
-                              - Validation → typical tests, what is evaluated, why it matters
-                              - Reasoning → contributing factors, design intent
-
-                              Do NOT force sections unnecessarily.
+                              - Structure: Component Name → Definition/Role → Technical Analysis (Mechanism/Failure Modes) → Summary/Conclusion.
+                              - Use bullet points for detailing multiple items to ensure readability.
 
                               ---
 
@@ -223,9 +215,9 @@ public class EngineeringChatPromptProvider {
                               ---
 
                               [Output Format]
-                              - Pure Markdown only
-                              - Natural chat-style structure
-                              - Real line breaks only
+                              - Pure Markdown only.
+                              - Compact and structured layout without excessive whitespace.
+                              - No meta-commentary or filler.
 
 
 """;
