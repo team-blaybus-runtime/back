@@ -7,6 +7,7 @@ import com.init.domain.persistence.chat.repository.ChatSummaryRepository;
 import com.init.domain.persistence.chat.entity.ChatSummary;
 import com.init.global.annotation.Helper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,7 @@ public class ChatHistoryManager {
     }
 
     public List<ChatMessage> getRecentMessages(Long userHisId, int limit) {
-        List<ChatMessage> messages = chatMessageRepository.findRecentMessages(userHisId, org.springframework.data.domain.PageRequest.of(0, limit));
+        List<ChatMessage> messages = chatMessageRepository.findRecentMessages(userHisId, PageRequest.of(0, limit));
         Collections.reverse(messages);
         return messages;
     }
