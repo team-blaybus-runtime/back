@@ -30,11 +30,11 @@ public class EngineeringChatPromptProvider {
         StringBuilder contextWithHistory = new StringBuilder(formatContext(knowledges));
 
         if (summary != null && !summary.isEmpty()) {
-            contextWithHistory.append("\n\n[Previous Conversation Summary]\n").append(summary);
+            contextWithHistory.append("\n\n[Conversation Summary]\n").append(summary);
         }
 
         if (questions != null && !questions.isEmpty()) {
-            contextWithHistory.append("\n\n[Previous Questions]\n");
+            contextWithHistory.append("\n\n[Recent Questions (Context)]\n");
             contextWithHistory.append(ChatPromptUtils.formatChatHistory(questions));
         }
 

@@ -71,6 +71,31 @@ public class ChatService {
                 });
     }
 
+//    public Flux<AiChatRes> chatStream(Long userId, ChatReq req) {
+//        return Mono.fromCallable(() -> prepareChat(userId, req))
+//                .subscribeOn(Schedulers.boundedElastic())
+//                .flatMapMany(preparation -> {
+//                    StringBuilder fullAnswer = new StringBuilder();
+//                    return openAiClient.chatStream(preparation.currentPrompt())
+//                            .map(chunk -> {
+//                                fullAnswer.append(chunk);
+//                                return new AiChatRes(chunk, preparation.userHisId());
+//                            })
+//                            .doOnComplete(() -> {
+//                                log.info("Chat Stream Completed: {}", preparation.userHisId());
+//
+//                                // 단순 글자 수 기반 로그 (추정치)
+//                                int estimatedTokens = fullAnswer.length() / 2;
+//                                log.info("[Usage Log] HistoryId: {}, Answer Length: {}, Est. Tokens: {}",
+//                                        preparation.userHisId(), fullAnswer.length(), estimatedTokens);
+//
+//                                eventPublisher.publishEvent(
+//                                        new ChatProcessEvent(preparation.userHisId(), req.content(), fullAnswer.toString())
+//                                );
+//                            });
+//                });
+//    }
+
     private ChatPreparation prepareChat(Long userId, ChatReq req) {
         // 1. ChatRoom 확인/생성
         UserStudyHis userStudyHis = userStudyHisService.getUserHistoryId(req.chatHistoryId());
@@ -78,7 +103,7 @@ public class ChatService {
         // 2. 이전 요약 및 최근 대화 로드
         String summary = historyManager.getSummary(userStudyHis.getId()).orElse(null);
 
-        List<ChatMessage> questions = historyManager.getAllQuestions(userStudyHis.getId());
+        List<ChatMessage> questions = historyManager.getRecentQuestionsTop7(userStudyHis.getId());
 
         // 3. Retrieval
         List<EngineeringKnowledge> knowledges =

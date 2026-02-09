@@ -36,7 +36,11 @@ public class ChatHistoryManager {
     }
 
     public List<ChatMessage> getRecentMessages(Long userHisId) {
-        List<ChatMessage> messages = chatMessageRepository.findTop10ByUserHisIdOrderByCreatedAtDesc(userHisId);
+        return getRecentMessages(userHisId, 10);
+    }
+
+    public List<ChatMessage> getRecentMessages(Long userHisId, int limit) {
+        List<ChatMessage> messages = chatMessageRepository.findRecentMessages(userHisId, org.springframework.data.domain.PageRequest.of(0, limit));
         Collections.reverse(messages);
         return messages;
     }
@@ -44,6 +48,20 @@ public class ChatHistoryManager {
     public List<ChatMessage> getAllQuestions(Long userHisId) {
         return chatMessageRepository.findAllByUserHisIdAndChatRoleOrderByCreatedAtAsc(userHisId, ChatRole.QUESTION);
     }
+
+    public List<ChatMessage> getRecentQuestionsTop7(Long userHisId) {
+        List<ChatMessage> questions = chatMessageRepository.findTop7ByUserHisIdAndChatRoleOrderByCreatedAtDesc(userHisId, ChatRole.QUESTION);
+        Collections.reverse(questions);
+        return questions;
+    }
+
+
+    public List<ChatMessage> getRecentQuestions(Long userHisId) {
+        List<ChatMessage> questions = chatMessageRepository.findTop4ByUserHisIdAndChatRoleOrderByCreatedAtDesc(userHisId, ChatRole.QUESTION);
+        Collections.reverse(questions);
+        return questions;
+    }
+
 
     public long getMessageCount(Long userHisId) {
         return chatMessageRepository.countByUserHisId(userHisId);

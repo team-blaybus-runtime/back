@@ -28,26 +28,25 @@ public class ChatEventListener {
     public void handleChatProcessEvent(ChatProcessEvent event) {
         log.debug("Handling ChatProcessEvent for userHisId: {}", event.userHisId());
         try {
+            // 1. 메시지 저장
             historyManager.saveMessage(event.userHisId(), event.question(), ChatRole.QUESTION);
             historyManager.saveMessage(event.userHisId(), event.answer(), ChatRole.ANSWER);
 
-            // 매 대화마다 요약본 업데이트 (현재 질문과 답변을 포함)
-            List<ChatMessage> turnMessages = List.of(
-                    ChatMessage.builder()
-                            .userHisId(event.userHisId())
-                            .content(event.question())
-                            .chatRole(ChatRole.QUESTION)
-                            .build(),
-                    ChatMessage.builder()
-                            .userHisId(event.userHisId())
-                            .content(event.answer())
-                            .chatRole(ChatRole.ANSWER)
-                            .build()
-            );
+            // 2. 메시지 개수 확인
+            long count = historyManager.getMessageCount(event.userHisId());
 
-            summaryService.updateSummary(event.userHisId(), turnMessages);
+            // 3. 요약 업데이트 전략 (최적화)
+            if (count == 2) {
+                summaryService.updateSummary(event.userHisId(), historyManager.getRecentMessages(event.userHisId(), 2));
+            } else if (count > 2 && count % 6 == 0) {
+                // 최근 2턴(4개 메시지)을 가져와서 기존 요약에 추가
+                summaryService.updateSummary(event.userHisId(), historyManager.getRecentMessages(event.userHisId(), 4));
+            }
+
         } catch (Exception e) {
             log.error("Error processing chat event for userHisId: {}", event.userHisId(), e);
+        } finally {
+            log.debug("ChatProcessEvent handled for userHisId: {}", event.userHisId());
         }
     }
 }

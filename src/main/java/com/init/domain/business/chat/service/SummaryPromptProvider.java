@@ -13,11 +13,13 @@ import java.util.List;
 @Helper
 public class SummaryPromptProvider {
     private static final String FIRST_SUMMARY_PREFIX =
-            "Summarize the following conversation with a focus on the technical context.\n\n";
+            "Summarize the following technical conversation concisely in Korean (max 3 lines).\n\n";
 
     private static final String CUMULATIVE_SUMMARY_TMPL = """
-            The following is an existing conversation summary.
-            Update this summary by incorporating the new conversation while preserving the existing content.
+            Update the existing summary with the new conversation.
+            - Focus on key components and technical requirements.
+            - Keep it very concise (max 5 bullet points).
+            - Language: Korean
             
             [Existing Summary]
             %s

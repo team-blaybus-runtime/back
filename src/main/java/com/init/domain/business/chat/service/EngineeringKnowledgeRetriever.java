@@ -38,6 +38,7 @@ public class EngineeringKnowledgeRetriever {
 
         List<Long> ids = embeddings.stream()
                 .map(EngineeringKnowledgeEmbedding::getKnowledgeId)
+                .limit(4) // 지연 시간 단축을 위해 상위 4개로 제한
                 .toList();
 
         // 1.1. 만약 데이터가 존재하지 않은 경우 모든 데이터를 기반으로 ID 생성
