@@ -30,7 +30,7 @@ public record UserStudyHisReadRes(
                         }
                         """
         )
-        Map<String, Object> viewInfo,
+        Object viewInfo,
 
         @Schema(description = "제품", example = "Drone")
         String ProductTypeDesc,

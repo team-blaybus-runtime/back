@@ -32,6 +32,6 @@ public record UserStudyHisCreateOrUpdateReq(
                         """
         )
         @NotNull
-        Map<String, Object> viewInfo
+        Object viewInfo
 ) {
 }
