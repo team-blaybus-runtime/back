@@ -20,13 +20,13 @@ import reactor.core.publisher.Flux;
 @Tag(name = "[AI Chat API]", description = "엔지니어링 지식 기반 AI 채팅 API")
 public interface AiChatApi {
 
-    @Operation(summary = "지식 기반 AI 채팅", 
+    @Operation(summary = "지식 기반 AI 채팅",
             description = "특정 제품 타입의 엔지니어링 지식을 바탕으로 AI와 채팅을 진행합니다.")
     @ApiResponse(responseCode = "200", description = "AI 답변 생성 성공")
     @PostMapping
     AiChatRes chat(@AuthenticationPrincipal SecurityUserDetails user,@RequestBody @Validated ChatReq req);
 
-    @Operation(summary = "지식 기반 AI 채팅 (스트리밍)", 
+    @Operation(summary = "지식 기반 AI 채팅 (스트리밍)",
             description = "특정 제품 타입의 엔지니어링 지식을 바탕으로 AI와 채팅을 진행하며, 답변을 스트리밍 방식으로 수신합니다.")
     @ApiResponse(responseCode = "200", description = "AI 답변 스트리밍 시작")
     @PostMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -35,7 +35,7 @@ public interface AiChatApi {
     @Operation(
             summary = "AI 채팅 목록 조회 (무한 스크롤)",
             description = """
-AI 채팅 기록을 **무한 스크롤 방식**으로 조회합니다.  
+AI 채팅 기록을 **무한 스크롤 방식**으로 조회합니다.
 마지막으로 조회된 메시지 ID를 기준으로 **이전 메시지**를 조회합니다.
 
 ### 요청 파라미터 설명

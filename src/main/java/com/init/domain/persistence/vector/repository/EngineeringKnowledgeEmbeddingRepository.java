@@ -12,11 +12,11 @@ import java.util.List;
 public interface EngineeringKnowledgeEmbeddingRepository extends JpaRepository<EngineeringKnowledgeEmbedding, Long> {
 
     @Query(value = """
-    SELECT 
-        knowledge_id, 
+    SELECT
+        knowledge_id,
         product_type,
-        NULL as embedding 
-    FROM engineering_knowledge_embedding 
+        NULL as embedding
+    FROM engineering_knowledge_embedding
     WHERE product_type = :productType
     ORDER BY embedding <=> CAST(:embedding AS vector)
     LIMIT 5

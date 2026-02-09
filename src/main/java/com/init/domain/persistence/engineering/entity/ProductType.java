@@ -15,4 +15,13 @@ public enum ProductType {
     V4_Engine("V4 Engine");
 
     private final String description;
+
+    public static ProductType fromDescription(String productTypeDesc) {
+        for (ProductType type : ProductType.values()) {
+            if (type.getDescription().equalsIgnoreCase(productTypeDesc)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown product type description: " + productTypeDesc);
+    }
 }

@@ -3,7 +3,6 @@ package com.init.domain.business.chat.service;
 import com.init.domain.persistence.chat.entity.ChatMessage;
 import com.init.global.annotation.Helper;
 import com.init.global.util.ChatPromptUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,10 +17,10 @@ public class SummaryPromptProvider {
     private static final String CUMULATIVE_SUMMARY_TMPL = """
             The following is an existing conversation summary.
             Update this summary by incorporating the new conversation while preserving the existing content.
-            
+
             [Existing Summary]
             %s
-            
+
             [New Conversation]
             %s
             """;
