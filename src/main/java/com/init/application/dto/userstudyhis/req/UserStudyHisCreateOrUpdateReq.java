@@ -1,6 +1,5 @@
 package com.init.application.dto.userstudyhis.req;
 
-import com.init.domain.persistence.engineering.entity.ProductType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +10,7 @@ import java.util.Map;
 public record UserStudyHisCreateOrUpdateReq(
         @Schema(description = "제품", example = "Drone")
         @NotNull
-        ProductType productType,
+        String productTypeDesc,
         @Schema(description = "학습 이력 제목", example = "드론 구조 학습")
         @NotEmpty
         String title,

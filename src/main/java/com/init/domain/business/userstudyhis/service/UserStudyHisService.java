@@ -24,13 +24,14 @@ public class UserStudyHisService {
 
     @Transactional
     public void createOrUpdate(Long userId, UserStudyHisCreateOrUpdateReq req) {
-        Optional<UserStudyHis> userStudyHis = userStudyHisRepository.findByUserIdAndProductType(userId, req.productType());
+        ProductType productType = ProductType.fromDescription(req.productTypeDesc());
+        Optional<UserStudyHis> userStudyHis = userStudyHisRepository.findByUserIdAndProductType(userId, productType);
         if (userStudyHis.isPresent()) {
             userStudyHis.get().update(req.title(), req.viewInfo());
         } else {
             User user = entitySimpReadService.findUser(userId);
             userStudyHisRepository.save(
-                    UserStudyHis.of(user, req.productType(), req.title(), req.viewInfo())
+                    UserStudyHis.of(user, productType, req.title(), req.viewInfo())
             );
         }
     }
@@ -56,7 +57,7 @@ public class UserStudyHisService {
     }
 
     @Transactional(readOnly = true)
-    public UserStudyHis getUserHistoryId(Long historyId){
+    public UserStudyHis getUserHistoryId(Long historyId) {
         return userStudyHisRepository.findById(historyId).orElse(null);
     }
 }
