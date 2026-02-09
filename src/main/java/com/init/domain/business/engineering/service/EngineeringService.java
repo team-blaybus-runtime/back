@@ -34,6 +34,7 @@ public class EngineeringService {
                 .map(knowledge -> new EngineeringPartReadRes(
                         knowledge.getPartName(),
                         extractKoreanContent(knowledge.getContent()),
+                        knowledge.getPosition(),
                         knowledge.getAssetUrl(),
                         knowledge.getImageUrl()
                 ))
