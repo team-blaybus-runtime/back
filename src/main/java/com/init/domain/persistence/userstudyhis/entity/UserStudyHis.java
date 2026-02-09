@@ -47,9 +47,9 @@ public class UserStudyHis extends DateAuditable {
 
     @Type(JsonType.class)
     @Column(name = "view_info", columnDefinition = "text")
-    private Map<String, Object> viewInfo;
+    private Object viewInfo;
 
-    public static UserStudyHis of(User user, ProductType productType, String title, Map<String, Object> viewInfo) {
+    public static UserStudyHis of(User user, ProductType productType, String title, Object viewInfo) {
         UserStudyHis userStudyHis = new UserStudyHis();
         userStudyHis.user = user;
         userStudyHis.productType = productType;
@@ -58,7 +58,7 @@ public class UserStudyHis extends DateAuditable {
         return userStudyHis;
     }
 
-    public void update(String title, Map<String, Object> viewInfo) {
+    public void update(String title, Object viewInfo) {
         this.title = title;
         this.viewInfo = viewInfo;
     }

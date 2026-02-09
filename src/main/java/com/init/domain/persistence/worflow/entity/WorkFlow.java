@@ -4,14 +4,18 @@ package com.init.domain.persistence.worflow.entity;
 import com.init.domain.persistence.common.model.DateAuditable;
 import com.init.domain.persistence.user.entity.User;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.Type;
-
-import java.util.Map;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,9 +36,9 @@ public class WorkFlow extends DateAuditable {
 
     @Type(JsonType.class)
     @Column(name = "node_info", columnDefinition = "text")
-    private Map<String, Object> nodeInfo;
+    private Object nodeInfo;
 
-    public static WorkFlow of(User user, String title, Map<String, Object> nodeInfo) {
+    public static WorkFlow of(User user, String title, Object nodeInfo) {
         WorkFlow workFlow = new WorkFlow();
         workFlow.user = user;
         workFlow.title = title;
@@ -42,7 +46,7 @@ public class WorkFlow extends DateAuditable {
         return workFlow;
     }
 
-    public void update(String title, Map<String, Object> nodeInfo) {
+    public void update(String title, Object nodeInfo) {
         this.title = title;
         this.nodeInfo = nodeInfo;
     }

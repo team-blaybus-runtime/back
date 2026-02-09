@@ -82,6 +82,6 @@ public record WorkFlowReadRes(
                         }
                         """
         )
-        Map<String, Object> nodeInfo
+        Object nodeInfo
 ) {
 }

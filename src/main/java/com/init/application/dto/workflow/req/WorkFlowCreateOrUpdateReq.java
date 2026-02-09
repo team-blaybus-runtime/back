@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Map;
-
 @Schema(title = "워크플로우 생성 및 수정 요청 DTO")
 public record WorkFlowCreateOrUpdateReq(
         @Schema(description = "워크플로우 제목", example = "드론 동작 워크플로우")
@@ -84,6 +82,6 @@ public record WorkFlowCreateOrUpdateReq(
                         """
         )
         @NotNull
-        Map<String, Object> nodeInfo
+        Object nodeInfo
 ) {
 }
