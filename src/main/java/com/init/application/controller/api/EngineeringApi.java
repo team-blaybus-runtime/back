@@ -2,7 +2,6 @@ package com.init.application.controller.api;
 
 import com.init.application.dto.engineering.res.EngineeringPartReadRes;
 import com.init.application.dto.engineering.res.EngineeringReadRes;
-import com.init.domain.persistence.engineering.entity.ProductType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -14,5 +13,5 @@ public interface EngineeringApi {
     List<EngineeringReadRes> read();
 
     @Operation(summary = "엔지니어링 부품 목록 조회", description = "제품 타입에 해당하는 부품 목록을 조회합니다.")
-    List<EngineeringPartReadRes> readParts(ProductType productType);
+    List<EngineeringPartReadRes> readParts(String productTypeDesc);
 }

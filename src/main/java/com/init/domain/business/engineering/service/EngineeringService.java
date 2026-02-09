@@ -27,7 +27,8 @@ public class EngineeringService {
                 .toList();
     }
 
-    public List<EngineeringPartReadRes> readParts(ProductType productType) {
+    public List<EngineeringPartReadRes> readParts(String productTypeDesc) {
+        ProductType productType = ProductType.fromDescription(productTypeDesc);
         List<EngineeringKnowledge> knowledges = engineeringKnowledgeRepository.findByProductType(productType);
         return knowledges.stream()
                 .map(knowledge -> new EngineeringPartReadRes(

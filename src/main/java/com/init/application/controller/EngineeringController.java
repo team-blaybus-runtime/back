@@ -4,7 +4,6 @@ import com.init.application.controller.api.EngineeringApi;
 import com.init.application.dto.engineering.res.EngineeringPartReadRes;
 import com.init.application.dto.engineering.res.EngineeringReadRes;
 import com.init.domain.business.engineering.service.EngineeringService;
-import com.init.domain.persistence.engineering.entity.ProductType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +24,7 @@ public class EngineeringController implements EngineeringApi {
 
     @Override
     @GetMapping("/engineering/parts")
-    public List<EngineeringPartReadRes> readParts(@RequestParam ProductType productType) {
-        return engineeringService.readParts(productType);
+    public List<EngineeringPartReadRes> readParts(@RequestParam String productTypeDesc) {
+        return engineeringService.readParts(productTypeDesc);
     }
 }
