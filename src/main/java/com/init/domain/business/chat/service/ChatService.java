@@ -125,5 +125,5 @@ public class ChatService {
     }
 
     private record ChatPreparation(Long userHisId, String currentPrompt) {}
-    
+
 }

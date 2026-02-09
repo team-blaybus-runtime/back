@@ -23,16 +23,16 @@ public class ChatQueryRewriter {
         Given the following conversation history and a follow-up question, rephrase the follow-up question to be a standalone search query that can be used to find relevant technical information.
         The goal is to resolve pronouns (like "that part", "it", "there") and context based on the previous conversation.
         If the question is already standalone, return it as is.
-        
+
         [Previous Conversation Summary]
         %s
-        
+
         [Recent Conversation History]
         %s
-        
+
         [Follow-up Question]
         %s
-        
+
         Standalone Query:
         """;
 

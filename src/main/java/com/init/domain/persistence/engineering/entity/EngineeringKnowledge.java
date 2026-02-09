@@ -1,10 +1,14 @@
 package com.init.domain.persistence.engineering.entity;
 
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.Type;
+
+import java.util.Map;
 
 @Entity
 @Data
@@ -43,4 +47,12 @@ public class EngineeringKnowledge {
 
     @Comment("에셋 파일 저장 주소")
     private String assetUrl;
+
+    @Comment("파츠 이미지 저장 주소")
+    private String imageUrl;
+
+    @Comment("초기 좌표 정보")
+    @Type(JsonType.class)
+    @Column(name = "position", columnDefinition = "text")
+    private Map<String, Object> position;
 }

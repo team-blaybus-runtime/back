@@ -3,7 +3,6 @@ package com.init.domain.business.chat.service;
 import com.init.domain.persistence.chat.entity.ChatMessage;
 import com.init.global.annotation.Helper;
 import com.init.global.util.ChatPromptUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class SummaryPromptProvider {
             
             [Existing Summary]
             %s
-            
+
             [New Conversation]
             %s
             """;

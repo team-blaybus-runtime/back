@@ -1,7 +1,6 @@
 package com.init.application.controller;
 
 import com.init.application.controller.api.UserApi;
-import com.init.application.dto.user.req.NicknameCheckReq;
 import com.init.application.dto.user.req.NicknameUpdateReq;
 import com.init.application.dto.user.req.ProfileUpdateReq;
 import com.init.application.dto.user.res.UserDetailRes;
@@ -14,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
