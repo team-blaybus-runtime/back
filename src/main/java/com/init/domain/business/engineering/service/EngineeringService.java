@@ -33,7 +33,7 @@ public class EngineeringService {
         return knowledges.stream()
                 .map(knowledge -> new EngineeringPartReadRes(
                         knowledge.getPartName(),
-                        extractKoreanContent(knowledge.getContent()),
+                        knowledge.getContent(),
                         knowledge.getPosition(),
                         knowledge.getAssetUrl(),
                         knowledge.getImageUrl()
@@ -41,25 +41,4 @@ public class EngineeringService {
                 .toList();
     }
 
-    /**
-     * content 문자열에서 [KO] 태그 이후의 한글 설명만 추출합니다.
-     *
-     * @param content 원본 content 문자열
-     * @return 한글 설명(없으면 빈 문자열)
-     */
-    public String extractKoreanContent(String content) {
-        if (content == null) {
-            return "";
-        }
-        int koStart = content.indexOf("[KO]");
-        if (koStart == -1) {
-            return "";
-        }
-        int start = koStart + 4; // [KO] 이후
-        int enStart = content.indexOf("[EN]", start);
-        if (enStart == -1) {
-            return content.substring(start).trim();
-        }
-        return content.substring(start, enStart).trim();
-    }
 }
