@@ -29,6 +29,16 @@
 <br />
 
 
+## ERD
+<img width="1521" height="902" alt="runtime" src="https://github.com/user-attachments/assets/e089e90e-6839-4e7c-87f8-ab54c1fc80e3" />
+
+## CI/CD
+<img width="843" height="313" alt="ci_cd" src="https://github.com/user-attachments/assets/79fc2827-9b22-45e0-8987-f5b12225d6c7" />
+
+## AWS
+<img width="1323" height="692" alt="AWS" src="https://github.com/user-attachments/assets/0bb263ec-4397-4702-a7a4-ffc067ef58c2" />
+
+
 ## 🖥️ 뷰 및 기능 설명
 
 ---
