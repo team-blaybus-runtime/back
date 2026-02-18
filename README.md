@@ -29,10 +29,6 @@
 <br />
 
 
-## 기술 스택 (Tech Stack)
-<img width="1551" height="868" alt="스크린샷 2026-02-13 오후 8 14 28" src="https://github.com/user-attachments/assets/23e733c3-9259-4189-a347-4a2a1193d191" />
-
-
 ## 🖥️ 뷰 및 기능 설명
 
 ---
